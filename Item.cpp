@@ -1,5 +1,8 @@
 #include "Item.hpp"
 
+#define BOLD "\e[1m"
+#define NON_BOLD "\e[0m"
+
 Item::Item(size_t order_number, std::string name, bool done_var) {
     this->order_number = order_number;
     this->name = name;
@@ -46,5 +49,5 @@ void Item::normalize() {
 }
 
 void Item::print() {
-    std::cout << this->order_number << " " << this->name << std::endl;
+    std::cout << BOLD << this->order_number << NON_BOLD << " " << this->name << std::endl;
 }
