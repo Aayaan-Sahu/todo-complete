@@ -48,7 +48,11 @@ void add(std::vector<Item>& todo_items, int argc, char** argv) {
     fout.open("./elements.todo");
     fout << todo_items.size() << std::endl;
     for (const Item& i : todo_items) {
-        fout << normalize(i.name, i.done) << " ";
+        if (std::find(i.name.begin(), i.name.end(), ' ') != i.name.end()) {
+            fout << "\"" << normalize(i.name, i.done) << "\" ";
+        } else {
+            fout << normalize(i.name, i.done) << " ";
+        }
         if (i.done == true) {
             fout << "true" << std::endl;
         } else {
@@ -100,7 +104,11 @@ void mark_as_done(std::vector<Item>& todo_items, int argc, char** argv) {
     fout.open("./elements.todo");
     fout << todo_items.size() << std::endl;
     for (const Item& i : todo_items) {
-        fout << normalize(i.name, i.done) << " ";
+        if (std::find(i.name.begin(), i.name.end(), ' ') != i.name.end()) {
+            fout << "\"" << normalize(i.name, i.done) << "\" ";
+        } else {
+            fout << normalize(i.name, i.done) << " ";
+        }
         if (i.done == true) {
             fout << "true" << std::endl;
         } else {
@@ -121,7 +129,11 @@ void mark_as_not_done(std::vector<Item>& todo_items, int argc, char** argv) {
     fout.open("./elements.todo");
     fout << todo_items.size() << std::endl;
     for (const Item& i : todo_items) {
-        fout << normalize(i.name, i.done) << " ";
+        if (std::find(i.name.begin(), i.name.end(), ' ') != i.name.end()) {
+            fout << "\"" << normalize(i.name, i.done) << "\" ";
+        } else {
+            fout << normalize(i.name, i.done) << " ";
+        }
         if (i.done == true) {
             fout << "true" << std::endl;
         } else {
@@ -174,15 +186,33 @@ int main(int argc, char** argv) {
         std::ifstream fin("./elements.todo");
         if (fin.peek() != std::ifstream::traits_type::eof()) {
             /* read elements */
-            int n;
-            fin >> n;
-            for (auto i = 0; i < n; i++) {
-                std::string name;
-                fin >> name;
-                std::string done_string;
-                fin >> done_string;
-                bool done = (done_string == "true") ? true : false;
-                todo_items.push_back(Item(i + 1, name, done));
+            std::string line;
+            bool first_line = true;
+            while (std::getline(fin, line)) {
+                if (first_line) {
+                    first_line = false;
+                    continue;
+                } else {
+                    /* Check if quotes are in the line */
+                    if (std::find(line.begin(), line.end(), '"') != line.end()) {
+                        /* Quotes exist */
+                        size_t pos_of_second_quote = 0;
+                        for (std::basic_string<char>::size_type i = 1; i < line.size(); i++) {
+                            if (line[i] == '"') { pos_of_second_quote = i; }
+                        }
+                        auto name = line.substr(1, pos_of_second_quote - 1);
+                        auto done_string = line.substr(pos_of_second_quote + 2, line.size());
+                        bool done = ( done_string == "true" ) ? true : false;
+                        todo_items.push_back(Item(todo_items.size() + 1, name, done));
+                    } else {
+                        /* Parse normally */
+                        std::string delimeter = " ";
+                        std::string name = line.substr(0, line.find(delimeter));
+                        std::string done_string = line.substr(line.find(delimeter) + 1, line.size());
+                        bool done = ( done_string == "true" ) ? true : false;
+                        todo_items.push_back(Item(todo_items.size() + 1, name, done));
+                    }
+                }
             }
         }
         fin.close();
