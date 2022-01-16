@@ -21,3 +21,6 @@ todo add [...items...]
 todo done [...item id's...]
 todo remove [...item id's...]
 ```
+
+## Friendly Warning
+The code is horrendous don't look at it
