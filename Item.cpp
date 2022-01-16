@@ -2,6 +2,9 @@
 
 #define BOLD "\e[1m"
 #define NON_BOLD "\e[0m"
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define RESET_COLOR "\033[0m"
 
 Item::Item(size_t order_number, std::string name, bool done_var) {
     this->order_number = order_number;
@@ -49,5 +52,9 @@ void Item::normalize() {
 }
 
 void Item::print() {
-    std::cout << BOLD << this->order_number << NON_BOLD << " " << this->name << std::endl;
+    if (this->done) {
+        std::cout << GREEN << BOLD << this->order_number << NON_BOLD << " " << this->name << RESET_COLOR << std::endl;
+    } else {
+        std::cout << RED << BOLD << this->order_number << NON_BOLD << " " << this->name << RESET_COLOR << std::endl;
+    }
 }
