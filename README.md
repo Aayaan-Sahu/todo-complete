@@ -1,5 +1,9 @@
 # TODO
 
+## Credits... I think
+This is literally `https://github.com/sioodmy/todo` in **cpp** because I wanted to
+Also doesn't have all the functionality though I might add that if I feel like it
+
 ## Install
 Just download the todo binary
 
