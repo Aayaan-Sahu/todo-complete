@@ -24,6 +24,7 @@ todo
 todo add [...items...]
 todo done [...item id's...]
 todo remove [...item id's...]
+todo arrange
 ```
 
 ## Friendly Warning
