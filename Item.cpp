@@ -53,8 +53,10 @@ void Item::normalize() {
 
 void Item::print() {
     if (this->done) {
-        std::cout << GREEN << BOLD << this->order_number << NON_BOLD << " " << this->name << RESET_COLOR << std::endl;
+        std::cout << GREEN << BOLD << this->order_number << NON_BOLD << " "
+                  << this->name << RESET_COLOR << std::endl;
     } else {
-        std::cout << RED << BOLD << this->order_number << NON_BOLD << " " << this->name << RESET_COLOR << std::endl;
+        std::cout << RED << BOLD << this->order_number << NON_BOLD << " "
+                  << this->name << RESET_COLOR << std::endl;
     }
 }

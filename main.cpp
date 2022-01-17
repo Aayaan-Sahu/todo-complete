@@ -86,7 +86,8 @@ bool validate_inputs_are_integers(int argc, char** argv) {
 bool validate_inputs_are_within_range(const std::vector<Item>& todo_items,
                                       int argc, char** argv) {
     for (auto i = 2; i < argc; i++) {
-        if ((unsigned long long)std::stoi(std::string(argv[i])) > (unsigned long long)todo_items.size()) {
+        if ((unsigned long long)std::stoi(std::string(argv[i])) >
+            (unsigned long long)todo_items.size()) {
             return false;
         }
     }
@@ -203,8 +204,11 @@ void arrange(std::vector<Item>& todo_items) {
         if (dones == 0) {
             break;
         } else {
-            /* Get a vector of the tail of the todo_items; the length is the number of items done */
-            auto tail = std::vector<Item>(todo_items.begin() + (todo_items.size() - dones), todo_items.end());
+            /* Get a vector of the tail of the todo_items; the length is the
+             * number of items done */
+            auto tail = std::vector<Item>(
+                todo_items.begin() + (todo_items.size() - dones),
+                todo_items.end());
 
             /* Check if the tail end is all done */
             if (all_done(tail)) {
@@ -259,23 +263,31 @@ int main(int argc, char** argv) {
                     continue;
                 } else {
                     /* Check if quotes are in the line */
-                    if (std::find(line.begin(), line.end(), '"') != line.end()) {
+                    if (std::find(line.begin(), line.end(), '"') !=
+                        line.end()) {
                         /* Quotes exist */
                         size_t pos_of_second_quote = 0;
-                        for (std::basic_string<char>::size_type i = 1; i < line.size(); i++) {
-                            if (line[i] == '"') { pos_of_second_quote = i; }
+                        for (std::basic_string<char>::size_type i = 1;
+                             i < line.size(); i++) {
+                            if (line[i] == '"') {
+                                pos_of_second_quote = i;
+                            }
                         }
                         auto name = line.substr(1, pos_of_second_quote - 1);
-                        auto done_string = line.substr(pos_of_second_quote + 2, line.size());
-                        bool done = ( done_string == "true" ) ? true : false;
-                        todo_items.push_back(Item(todo_items.size() + 1, name, done));
+                        auto done_string =
+                            line.substr(pos_of_second_quote + 2, line.size());
+                        bool done = (done_string == "true") ? true : false;
+                        todo_items.push_back(
+                            Item(todo_items.size() + 1, name, done));
                     } else {
                         /* Parse normally */
                         std::string delimeter = " ";
                         std::string name = line.substr(0, line.find(delimeter));
-                        std::string done_string = line.substr(line.find(delimeter) + 1, line.size());
-                        bool done = ( done_string == "true" ) ? true : false;
-                        todo_items.push_back(Item(todo_items.size() + 1, name, done));
+                        std::string done_string =
+                            line.substr(line.find(delimeter) + 1, line.size());
+                        bool done = (done_string == "true") ? true : false;
+                        todo_items.push_back(
+                            Item(todo_items.size() + 1, name, done));
                     }
                 }
             }
@@ -390,16 +402,16 @@ int main(int argc, char** argv) {
                 print(todo_items);
             } else {
                 std::fprintf(
-                    stderr,
-                    BOLDRED "arrange doesn't require any additional inputs\n" RESET
-                );
+                    stderr, BOLDRED
+                    "arrange doesn't require any additional inputs\n" RESET);
             }
         } else {
             std::fprintf(stderr, BOLDRED "Invalid usage\n" RESET);
             std::fprintf(
                 stderr,
                 "Usage:\n\ttodo\n\ttodo add [...items...]\n\ttodo done "
-                "[...item id's...]\n\ttodo remove [...item id's...]\n\ttodo arrange\n");
+                "[...item id's...]\n\ttodo remove [...item id's...]\n\ttodo "
+                "arrange\n");
         }
     }
 }
