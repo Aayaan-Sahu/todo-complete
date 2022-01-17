@@ -178,6 +178,71 @@ void remove(std::vector<Item>& todo_items, int argc, char** argv) {
     fout.close();
 }
 
+bool all_done(const std::vector<Item>& todo_items) {
+    for (const auto& i : todo_items) {
+        if (i.done == false) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void arrange(std::vector<Item>& todo_items) {
+    /* count number of done's */
+    int dones = 0;
+    for (const auto& item : todo_items) {
+        if (item.done == true) {
+            dones++;
+        }
+    }
+
+    /* Sort them */
+    unsigned long i = 0;
+    while (i < todo_items.size()) {
+        /* If number of done == 0, break */
+        if (dones == 0) {
+            break;
+        } else {
+            /* Get a vector of the tail of the todo_items; the length is the number of items done */
+            auto tail = std::vector<Item>(todo_items.begin() + (todo_items.size() - dones), todo_items.end());
+
+            /* Check if the tail end is all done */
+            if (all_done(tail)) {
+                break;
+            } else {
+                /* Check if the current item is done */
+                if (todo_items[i].done == true) {
+                    Item temp = todo_items[i];
+                    todo_items.erase(todo_items.begin() + i);
+                    todo_items.push_back(temp);
+                } else {
+                    i++;
+                    continue;
+                }
+            }
+        }
+    }
+
+    /* Reorder */
+    for (std::vector<Item>::size_type i = 0; i < todo_items.size(); i++) {
+        todo_items[i].order_number = i + 1;
+    }
+
+    /* Serialize */
+    std::ofstream fout;
+    fout.open("./elements.todo");
+    fout << todo_items.size() << std::endl;
+    for (const Item& i : todo_items) {
+        fout << normalize(i.name, i.done) << " ";
+        if (i.done == true) {
+            fout << "true" << std::endl;
+        } else {
+            fout << "false" << std::endl;
+        }
+    }
+    fout.close();
+}
+
 int main(int argc, char** argv) {
     std::vector<Item> todo_items;
 
@@ -319,12 +384,22 @@ int main(int argc, char** argv) {
                              "Usage for todo remove requires arguments to mark "
                              "done\n" RESET);
             }
+        } else if (std::string(argv[1]) == "arrange") {
+            if (argc == 2) {
+                arrange(todo_items);
+                print(todo_items);
+            } else {
+                std::fprintf(
+                    stderr,
+                    BOLDRED "arrange doesn't require any additional inputs\n" RESET
+                );
+            }
         } else {
             std::fprintf(stderr, BOLDRED "Invalid usage\n" RESET);
             std::fprintf(
                 stderr,
                 "Usage:\n\ttodo\n\ttodo add [...items...]\n\ttodo done "
-                "[...item id's...]\n\ttodo remove [...item id's...]\n");
+                "[...item id's...]\n\ttodo remove [...item id's...]\n\ttodo arrange\n");
         }
     }
 }
