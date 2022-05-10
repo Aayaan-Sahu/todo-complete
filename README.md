@@ -18,7 +18,7 @@ or
 ```console
 git clone https://github.com/Aayaan-Sahu/todo-complete
 cd todo-complete
-./build.sh # Make sure you read the file beofre (it's good practice)
+./build.sh # Make sure you read the file before (it's good practice)
 ```
 
 ## Usage
